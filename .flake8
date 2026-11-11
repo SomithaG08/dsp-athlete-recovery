@@ -1,0 +1,5 @@
+[flake8]
+max-line-length = 125
+extend-ignore = E203,W503
+exclude = .git,.venv,venv,build,dist,__pycache__,data,airflow/logs,gx/gx/uncommitted,handoff_zips
+per-file-ignores = grafana/build_dashboards.py:E501
