@@ -9,21 +9,21 @@ and model behaviour are monitored with dashboards and Microsoft Teams alerts.
 
 ```mermaid
 flowchart LR
-  RAW[raw_data] -->|every 5 min| ING[Ingestion DAG]
-  ING -->|GX: 2 suites, 59 rules| GOOD[good_data]
+  RAW[raw_data] -->|"every minute"| ING[Ingestion DAG]
+  ING -->|"GX: 2 suites, 59 rules"| GOOD[good_data]
   ING --> BAD[bad_data]
   ING -->|statistics| DB[(PostgreSQL)]
-  ING -->|Medium/High| TEAMS[Teams]
+  ING -->|"Medium/High"| TEAMS[Teams]
   ING --> DOCS[GX Data Docs] --> NGINX[nginx :8088]
-  GOOD -->|every 5 min, new files only| PRED[Prediction DAG] --> API[FastAPI]
+  GOOD -->|"every 2 min, new files only"| PRED[Prediction DAG] --> API[FastAPI]
   UI[Streamlit] --> API
   API -->|predictions + features| DB
   GOOD --> TRAIN[Training DAG] --> MLF[MLflow registry]
   TRAIN -->|training stats| DB
   TRAIN -->|not promoted| TEAMS
-  TRAIN -->|promoted: /reload-model| API
+  TRAIN -->|"promoted: /reload-model"| API
   TRAIN -->|used data| ARCH[archived_data]
-  MLF -->|@champion| API
+  MLF -->|"@champion"| API
   DRIFT[Drift DAG] --> DB
   DB --> GRAF[Grafana: 2 dashboards + alerts] --> TEAMS
 ```
