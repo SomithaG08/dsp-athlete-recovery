@@ -281,7 +281,7 @@ Grafana dashboards (folder *DSP Monitoring*), refreshed every 30 seconds:
 |---|---|---|
 | Data Quality Alerts | ingestion DAG | file with Medium or High criticality |
 | Data Quality Alerts | Grafana | > 30 % invalid rows in 15 min; High-criticality file in 10 min |
-| ML Alerts | training DAG | candidate not promoted |
+| ML Alerts | training DAG | candidate promoted or not promoted |
 | ML Alerts | Grafana | feature drift (PSI ≥ 0.2); average prediction shift > 15 points |
 
 Webhooks are created in Teams with *Workflows → "Post to a channel when a webhook request is received"*.
