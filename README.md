@@ -46,7 +46,7 @@ flowchart LR
   API -->|predictions + features| DB
   GOOD --> TRAIN[Training DAG] --> MLF[MLflow registry]
   TRAIN -->|training stats| DB
-  TRAIN -->|not promoted| TEAMS
+  TRAIN -->|"promoted / not promoted"| TEAMS
   TRAIN -->|"promoted: /reload-model"| API
   TRAIN -->|used data| ARCH[archived_data]
   MLF -->|"@champion"| API
@@ -236,7 +236,8 @@ Alerts link to the Data Docs report of that file on nginx. To validate a file ma
 - **Promotion** to `@champion` only if the candidate's holdout RMSE is lower than or equal to the
   champion's **and** inference takes at most `MAX_INFERENCE_MS_PER_ROW`. With no champion yet, the first
   candidate is promoted. The comparison and the decision are logged on the candidate's MLflow run.
-- **Promoted**: the API reloads the model and the used files move to `archived_data`.
+- **Promoted**: the API reloads the model, a Teams ML card confirms the new champion, and the used files
+  move to `archived_data`.
   **Not promoted**: a Teams ML alert gives the reason and a link to the MLflow run.
 - Training statistics are stored per model version; drift is measured against the **champion's**.
 
@@ -280,7 +281,7 @@ Grafana dashboards (folder *DSP Monitoring*), refreshed every 30 seconds:
 |---|---|---|
 | Data Quality Alerts | ingestion DAG | file with Medium or High criticality |
 | Data Quality Alerts | Grafana | > 30 % invalid rows in 15 min; High-criticality file in 10 min |
-| ML Alerts | training DAG | candidate not promoted |
+| ML Alerts | training DAG | candidate promoted or not promoted |
 | ML Alerts | Grafana | feature drift (PSI ≥ 0.2); average prediction shift > 15 points |
 
 Webhooks are created in Teams with *Workflows → "Post to a channel when a webhook request is received"*.
